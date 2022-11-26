@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"github.com/chyndman/adventofcode2022/internal/puzzle"
-	"github.com/chyndman/adventofcode2022/internal/puzzle/demo"	
+	"github.com/chyndman/adventofcode2022/internal/demo"	
 )
 
 var PuzzleSets = map[string]map[string]puzzle.Puzzle{
