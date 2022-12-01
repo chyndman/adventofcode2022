@@ -4,11 +4,13 @@ import (
 	"log"
 	"os"
 	"github.com/chyndman/adventofcode2022/internal/puzzle"
-	"github.com/chyndman/adventofcode2022/internal/demo"	
+	"github.com/chyndman/adventofcode2022/internal/demo"
+	"github.com/chyndman/adventofcode2022/internal/aoc2022"
 )
 
 var PuzzleSets = map[string]map[string]puzzle.Puzzle{
 	"demo": demo.Puzzles,
+	"aoc2022": aoc2022.Puzzles,
 }
 
 func getArg(index int, valDefault string) (val string) {
