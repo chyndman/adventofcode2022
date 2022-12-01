@@ -6,4 +6,5 @@ import (
 
 var Puzzles = map[string]puzzle.Puzzle{
 	"day1.1": Day1Part1{},
+	"day1.2": Day1Part2{},
 }
