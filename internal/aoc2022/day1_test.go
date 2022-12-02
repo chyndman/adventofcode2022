@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var vec string = `1000
+var vecDay1 string = `1000
 2000
 3000
 
@@ -22,7 +22,7 @@ var vec string = `1000
 `
 
 func TestDay1Part1(t *testing.T) {
-	r := strings.NewReader(vec)
+	r := strings.NewReader(vecDay1)
 	answer, err := Day1Part1{}.Solve(r)
 	expected := "24000"
 	if nil != err || expected != answer {
@@ -31,7 +31,7 @@ func TestDay1Part1(t *testing.T) {
 }
 
 func TestDay1Part2(t *testing.T) {
-	r := strings.NewReader(vec)
+	r := strings.NewReader(vecDay1)
 	answer, err := Day1Part2{}.Solve(r)
 	expected := "45000"
 	if nil != err || expected != answer {
