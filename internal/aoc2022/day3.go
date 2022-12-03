@@ -6,8 +6,6 @@ import (
 	"strconv"
 )
 
-type Day3Part1 struct{}
-
 func ruckLetter2Prio(ltr byte) (prio int) {
 	switch {
 	case 'a' <= ltr && ltr <= 'z':
@@ -30,18 +28,47 @@ func ruckItemMask(compart string) (mask uint64) {
 	return
 }
 
+func ruckPrioScan(mask uint64) (prio int) {
+	for p := ruckPrioMin; p <= ruckPrioMax; p++ {
+		if 0 != mask&(1<<p) {
+			prio = p
+			break
+		}
+	}
+	return
+}
+
+type Day3Part1 struct{}
+
 func (_ Day3Part1) Solve(input io.Reader) (answer string, err error) {
 	var acc int
 	lineIter := func(line string) {
 		halflen := len(line) / 2
 		maskl, maskr := ruckItemMask(line[:halflen]), ruckItemMask(line[halflen:])
 		masklr := maskl & maskr
-		for p := ruckPrioMin; p <= ruckPrioMax; p++ {
-			if 0 != masklr&(1<<p) {
-				acc += p
-				break
-			}
+		acc += ruckPrioScan(masklr)
+	}
+
+	puzzle.ForEachLine(input, lineIter)
+	answer = strconv.Itoa(acc)
+	return
+}
+
+type Day3Part2 struct{}
+
+func (_ Day3Part2) Solve(input io.Reader) (answer string, err error) {
+	var acc, lnum int
+	var maskgrp uint64
+	const grpsize int = 3
+	lineIter := func(line string) {
+		if 0 == lnum%grpsize {
+			maskgrp = 0xffffffffffffffff
 		}
+		maskgrp &= ruckItemMask(line)
+		if grpsize-1 == lnum%grpsize {
+			acc += ruckPrioScan(maskgrp)
+		}
+		lnum++
 	}
 
 	puzzle.ForEachLine(input, lineIter)
