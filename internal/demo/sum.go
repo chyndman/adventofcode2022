@@ -10,7 +10,7 @@ type Sum struct{}
 
 func (_ Sum) Solve(input io.Reader) (answer string, err error) {
 	var acc int
-	lineIter := func (line string) {
+	lineIter := func(line string) {
 		var n int
 		n, err = strconv.Atoi(line)
 		if err != nil {

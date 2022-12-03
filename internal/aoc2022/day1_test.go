@@ -1,8 +1,8 @@
 package aoc2022
 
 import (
-	"testing"
 	"strings"
+	"testing"
 )
 
 var vecDay1 string = `1000

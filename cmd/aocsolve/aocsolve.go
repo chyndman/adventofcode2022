@@ -1,15 +1,15 @@
 package main
 
 import (
+	"github.com/chyndman/adventofcode2022/internal/aoc2022"
+	"github.com/chyndman/adventofcode2022/internal/demo"
+	"github.com/chyndman/adventofcode2022/internal/puzzle"
 	"log"
 	"os"
-	"github.com/chyndman/adventofcode2022/internal/puzzle"
-	"github.com/chyndman/adventofcode2022/internal/demo"
-	"github.com/chyndman/adventofcode2022/internal/aoc2022"
 )
 
 var PuzzleSets = map[string]map[string]puzzle.Puzzle{
-	"demo": demo.Puzzles,
+	"demo":    demo.Puzzles,
 	"aoc2022": aoc2022.Puzzles,
 }
 
@@ -23,9 +23,9 @@ func getArg(index int, valDefault string) (val string) {
 }
 
 func main() {
-	param := map[string]string {
-		"pzset": getArg(1, ""),
-		"pz": getArg(2, ""),
+	param := map[string]string{
+		"pzset":  getArg(1, ""),
+		"pz":     getArg(2, ""),
 		"infile": getArg(3, "input.txt"),
 	}
 

@@ -1,8 +1,8 @@
 package demo
 
 import (
-	"testing"
 	"strings"
+	"testing"
 )
 
 func TestSum(t *testing.T) {

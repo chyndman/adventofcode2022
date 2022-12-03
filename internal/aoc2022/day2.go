@@ -10,13 +10,13 @@ import (
 var rpsPat = regexp.MustCompile("([A-C]) ([X-Z])")
 
 const (
-	rock = 0
-	paper = 1
+	rock     = 0
+	paper    = 1
 	scissors = 2
 
 	loss = -1
 	draw = 0
-	win = 1
+	win  = 1
 )
 
 func rpsResult(x, y int) (r int) {
@@ -67,7 +67,7 @@ type Day2Part1 struct{}
 
 func (_ Day2Part1) Solve(input io.Reader) (answer string, err error) {
 	var acc int
-	lineIter := func (line string) {
+	lineIter := func(line string) {
 		submatch := rpsPat.FindStringSubmatch(line)
 		opp, me := rpsDecode(submatch[1]), rpsDecode(submatch[2])
 		meScore := rpsHandScore(me)
@@ -86,7 +86,7 @@ type Day2Part2 struct{}
 
 func (_ Day2Part2) Solve(input io.Reader) (answer string, err error) {
 	var acc int
-	lineIter := func (line string) {
+	lineIter := func(line string) {
 		submatch := rpsPat.FindStringSubmatch(line)
 		opp, result := rpsDecode(submatch[1]), rpsResultDecode(submatch[2])
 		var me int
