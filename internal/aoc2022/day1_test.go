@@ -1,11 +1,12 @@
 package aoc2022
 
 import (
-	"strings"
+	"github.com/chyndman/adventofcode2022/internal/puzzleexpect"
 	"testing"
 )
 
-var vecDay1 string = `1000
+func TestDay1(t *testing.T) {
+	const vec string = `1000
 2000
 3000
 
@@ -20,21 +21,6 @@ var vecDay1 string = `1000
 
 10000
 `
-
-func TestDay1Part1(t *testing.T) {
-	r := strings.NewReader(vecDay1)
-	answer, err := Day1Part1{}.Solve(r)
-	expected := "24000"
-	if nil != err || expected != answer {
-		t.Errorf("Day1Part1 answer = %s, %v; want %s, nil", answer, err, expected)
-	}
-}
-
-func TestDay1Part2(t *testing.T) {
-	r := strings.NewReader(vecDay1)
-	answer, err := Day1Part2{}.Solve(r)
-	expected := "45000"
-	if nil != err || expected != answer {
-		t.Errorf("Day1Part2 answer = %s, %v; want %s, nil", answer, err, expected)
-	}
+	t.Run("1", puzzleexpect.SolveTester(Day1Part1{}, vec, "24000"))
+	t.Run("2", puzzleexpect.SolveTester(Day1Part2{}, vec, "45000"))
 }
