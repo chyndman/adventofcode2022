@@ -11,9 +11,9 @@ type Day3Part1 struct{}
 func ruckLetter2Prio(ltr byte) (prio int) {
 	switch {
 	case 'a' <= ltr && ltr <= 'z':
-		prio = 1 + int(ltr - 'a')
+		prio = 1 + int(ltr-'a')
 	case 'A' <= ltr && ltr <= 'Z':
-		prio = 27 + int(ltr - 'A')
+		prio = 27 + int(ltr-'A')
 	}
 	return
 }
@@ -37,7 +37,7 @@ func (_ Day3Part1) Solve(input io.Reader) (answer string, err error) {
 		maskl, maskr := ruckItemMask(line[:halflen]), ruckItemMask(line[halflen:])
 		masklr := maskl & maskr
 		for p := ruckPrioMin; p <= ruckPrioMax; p++ {
-			if 0 != masklr & (1 << p) {
+			if 0 != masklr&(1<<p) {
 				acc += p
 				break
 			}
