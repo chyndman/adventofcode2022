@@ -1,0 +1,2 @@
+# gofmt mandates LF
+*.go text eol=lf
