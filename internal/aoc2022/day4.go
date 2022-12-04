@@ -41,3 +41,27 @@ func (_ Day4Part1) Solve(input io.Reader) (answer string, err error) {
 	answer = strconv.Itoa(acc)
 	return
 }
+
+type Day4Part2 struct{}
+
+func (_ Day4Part2) Solve(input io.Reader) (answer string, err error) {
+	var acc int
+	lineIter := func(line string) {
+		xa, xb, ya, yb := campSectionRangePairDecode(line)
+		mina, maxb := xa, xb
+		if ya < xa {
+			mina = ya
+		}
+		if yb > xb {
+			maxb = yb
+		}
+
+		if maxb-mina <= (xb-xa)+(yb-ya) {
+			acc++
+		}
+	}
+
+	puzzle.ForEachLine(input, lineIter)
+	answer = strconv.Itoa(acc)
+	return
+}
