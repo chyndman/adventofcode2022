@@ -15,12 +15,16 @@ func supplyStackPush(stacks map[int]string, idx int, crates string) {
 	stacks[idx] = crates + stk
 }
 
-func supplyStackPop(stacks map[int]string, idx, count int) (crates string) {
+func supplyStackPop(stacks map[int]string, idx, count int, rev bool) (crates string) {
 	crates = ""
 	stk, exists := stacks[idx]
 	if exists {
 		for i := 0; i < count; i++ {
-			crates = string(stk[i]) + crates
+			if rev {
+				crates = string(stk[i]) + crates
+			} else {
+				crates = crates + string(stk[i])
+			}
 		}
 		stacks[idx] = stk[count:]
 	}
@@ -37,9 +41,7 @@ func supplyStackProcStmtDecode(line string) (count, stkFrom, stkTo int) {
 	return
 }
 
-type Day5Part1 struct{}
-
-func (_ Day5Part1) Solve(input io.Reader) (answer string, err error) {
+func solveDay5Common(input io.Reader, rev bool) (answer string, err error) {
 	stacks := make(map[int]string)
 	maxStkIdx := 0
 	state := "stacks"
@@ -63,7 +65,7 @@ func (_ Day5Part1) Solve(input io.Reader) (answer string, err error) {
 			state = "procedure"
 		case "procedure":
 			count, stkFrom, stkTo := supplyStackProcStmtDecode(line)
-			supplyStackPush(stacks, stkTo, supplyStackPop(stacks, stkFrom, count))
+			supplyStackPush(stacks, stkTo, supplyStackPop(stacks, stkFrom, count, rev))
 		}
 	}
 
@@ -77,4 +79,16 @@ func (_ Day5Part1) Solve(input io.Reader) (answer string, err error) {
 	}
 
 	return
+}
+
+type Day5Part1 struct{}
+
+func (_ Day5Part1) Solve(input io.Reader) (answer string, err error) {
+	return solveDay5Common(input, true)
+}
+
+type Day5Part2 struct{}
+
+func (_ Day5Part2) Solve(input io.Reader) (answer string, err error) {
+	return solveDay5Common(input, false)
 }

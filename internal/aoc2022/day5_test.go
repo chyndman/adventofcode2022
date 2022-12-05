@@ -17,4 +17,5 @@ move 2 from 2 to 1
 move 1 from 1 to 2
 `
 	t.Run("1", puzzleexpect.SolveTester(Day5Part1{}, vec, "CMZ"))
+	t.Run("2", puzzleexpect.SolveTester(Day5Part2{}, vec, "MCD"))
 }
