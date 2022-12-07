@@ -31,4 +31,5 @@ $ ls
 7214296 k
 `
 	t.Run("1", puzzleexpect.SolveTester(Day7Part1, vec, "95437"))
+	t.Run("2", puzzleexpect.SolveTester(Day7Part2, vec, "24933642"))
 }

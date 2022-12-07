@@ -34,10 +34,57 @@ var (
 	lsOutFilePat = regexp.MustCompile(`(\d+) (.+)`)
 )
 
-type Day7 struct{}
+type Day7 struct{
+	SolveWithFs func(*D7Dir) (string, error)
+}
+
+func bfsTraverseD7Dir(fs *D7Dir, fn func(dir *D7Dir)) {
+	dl := make([]*D7Dir, 1)
+	dl[0] = fs
+	for 0 < len(dl) {
+		head := dl[0]
+		dl = dl[1:]
+
+		fn(head)
+
+		for _, subdir := range head.Dirs {
+			dl = append(dl, subdir)
+		}
+	}
+}
+
+func swfs1(fs *D7Dir) (answer string, err error) {
+	acc := 0
+	dirFn := func(dir *D7Dir) {
+		if dir.FileSizeDeep <= 100000 {
+			acc += dir.FileSizeDeep
+		}		
+	}
+	bfsTraverseD7Dir(fs, dirFn)
+	answer = strconv.Itoa(acc)
+	return
+}
+
+func swfs2(fs *D7Dir) (answer string, err error) {
+	best := fs.FileSizeDeep
+	reclaimMin := fs.FileSizeDeep - (70000000 - 30000000)
+	if 0 >= reclaimMin {
+		return "0", nil
+	}
+
+	dirFn := func(dir *D7Dir) {
+		if dir.FileSizeDeep >= reclaimMin && best > dir.FileSizeDeep {
+			best = dir.FileSizeDeep
+		}
+	}
+	bfsTraverseD7Dir(fs, dirFn)
+	answer = strconv.Itoa(best)
+	return
+}
 
 var (
-	Day7Part1 = Day7{}
+	Day7Part1 = Day7{swfs1}
+	Day7Part2 = Day7{swfs2}
 )
 
 func (p Day7) Solve(input io.Reader) (answer string, err error) {
@@ -78,23 +125,5 @@ func (p Day7) Solve(input io.Reader) (answer string, err error) {
 	}
 
 	puzzle.ForEachLine(input, lineIter)
-
-	acc := 0
-	dl := make([]*D7Dir, 1)
-	dl[0] = fs
-	for 0 < len(dl) {
-		head := dl[0]
-		dl = dl[1:]
-
-		if head.FileSizeDeep <= 100000 {
-			acc += head.FileSizeDeep
-		}
-
-		for _, subdir := range head.Dirs {
-			dl = append(dl, subdir)
-		}
-	}
-
-	answer = strconv.Itoa(acc)
-	return
+	return p.SolveWithFs(fs)
 }
