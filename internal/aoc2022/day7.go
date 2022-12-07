@@ -34,7 +34,7 @@ var (
 	lsOutFilePat = regexp.MustCompile(`(\d+) (.+)`)
 )
 
-type Day7 struct{
+type Day7 struct {
 	SolveWithFs func(*D7Dir) (string, error)
 }
 
@@ -58,7 +58,7 @@ func swfs1(fs *D7Dir) (answer string, err error) {
 	dirFn := func(dir *D7Dir) {
 		if dir.FileSizeDeep <= 100000 {
 			acc += dir.FileSizeDeep
-		}		
+		}
 	}
 	bfsTraverseD7Dir(fs, dirFn)
 	answer = strconv.Itoa(acc)
