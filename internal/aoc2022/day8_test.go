@@ -13,4 +13,5 @@ func TestDay8(t *testing.T) {
 35390
 `
 	t.Run("1", puzzleexpect.SolveTester(Day8Part1, vec, "21"))
+	t.Run("2", puzzleexpect.SolveTester(Day8Part2, vec, "8"))
 }

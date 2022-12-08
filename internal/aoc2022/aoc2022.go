@@ -20,4 +20,5 @@ var Puzzles = map[string]puzzle.Puzzle{
 	"day7.1": Day7Part1,
 	"day7.2": Day7Part2,
 	"day8.1": Day8Part1,
+	"day8.2": Day8Part2,
 }
