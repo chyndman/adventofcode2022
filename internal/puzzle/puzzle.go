@@ -3,6 +3,7 @@ package puzzle
 import (
 	"bufio"
 	"io"
+	"regexp"
 )
 
 type Puzzle interface {
@@ -10,8 +11,13 @@ type Puzzle interface {
 }
 
 func ForEachLine(input io.Reader, fn func(line string)) {
-	sc := bufio.NewScanner(input)
-	for sc.Scan() {
+	for sc := bufio.NewScanner(input); sc.Scan(); {
 		fn(sc.Text())
+	}
+}
+
+func ForEachLineSubmatches(input io.Reader, pat string, fn func(submatches []string)) {
+	for r, sc := regexp.MustCompile(pat), bufio.NewScanner(input); sc.Scan(); {
+		fn(r.FindStringSubmatch(sc.Text()))
 	}
 }
