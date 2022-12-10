@@ -4,6 +4,7 @@ import (
 	"github.com/chyndman/adventofcode2022/internal/aoc2022"
 	"github.com/chyndman/adventofcode2022/internal/demo"
 	"github.com/chyndman/adventofcode2022/internal/puzzle"
+	"fmt"
 	"log"
 	"os"
 )
@@ -53,7 +54,7 @@ func main() {
 	if pzErr != nil {
 		log.Print(pzErr)
 	} else {
-		log.Printf("Answer: %s", pzAnswer)
+		fmt.Println(pzAnswer)
 	}
 
 	if err := f.Close(); err != nil {
