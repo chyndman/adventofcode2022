@@ -1,10 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"github.com/chyndman/adventofcode2022/internal/aoc2022"
 	"github.com/chyndman/adventofcode2022/internal/demo"
 	"github.com/chyndman/adventofcode2022/internal/puzzle"
-	"fmt"
 	"log"
 	"os"
 )
