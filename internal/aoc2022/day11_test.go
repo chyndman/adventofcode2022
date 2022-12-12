@@ -36,4 +36,5 @@ Monkey 3:
 `
 
 	t.Run("1", puzzleexpect.SolveTester(Day11Part1, vec, "10605"))
+  t.Run("2", puzzleexpect.SolveTester(Day11Part2, vec, "2713310158"))
 }

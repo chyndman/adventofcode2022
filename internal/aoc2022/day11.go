@@ -16,63 +16,75 @@ var (
 )
 
 type d11Monkey struct {
-	Items                           []int
-	Op                              func(int) int
-	ThrowMod, TrueThrow, FalseThrow int
-	InspectionCount                 int
+	Items                           []uint64
+	Op                              func(uint64) uint64
+	ThrowMod, TrueThrow, FalseThrow uint64
+	InspectionCount                 uint64
 }
 
-type Day11 struct{}
+type Day11 struct {
+	Rounds, WorryDiv uint64
+}
 
 var (
-	Day11Part1 = Day11{}
+	Day11Part1 = Day11{20, 3}
+	Day11Part2 = Day11{10000, 1}
 )
 
 func (p Day11) Solve(input io.Reader) (answer string, err error) {
-	acc := 0
+	var acc uint64
 	monkeys := make([]d11Monkey, 0)
+	var lcm uint64 = uint64(1)
 	for sc := bufio.NewScanner(input); sc.Scan(); {
 		mk := d11Monkey{}
 
 		sc.Scan()
 		itemStrs := strings.Split(d11StartingPat.FindStringSubmatch(sc.Text())[1], ", ")
-		mk.Items = make([]int, len(itemStrs))
+		mk.Items = make([]uint64, len(itemStrs))
 		for i := range mk.Items {
-			mk.Items[i], _ = strconv.Atoi(itemStrs[i])
+			item, _ := strconv.Atoi(itemStrs[i])
+			mk.Items[i] = uint64(item)
 		}
 
 		sc.Scan()
 		opSubmatch := d11OpPat.FindStringSubmatch(sc.Text())
 		operator, operand := opSubmatch[1], opSubmatch[2]
-		binop := func(a, b int) int { return a + b }
+		binop := func(a, b uint64) uint64 { return a + b }
 		if '*' == operator[0] {
-			binop = func(a, b int) int { return a * b }
+			binop = func(a, b uint64) uint64 { return a * b }
 		}
-		op := func(x int) int { return binop(x, x) }
+		op := func(x uint64) uint64 { return binop(x, x) }
 		if "old" != operand {
 			num, _ := strconv.Atoi(operand)
-			op = func(x int) int { return binop(x, num) }
+			op = func(x uint64) uint64 { return binop(x, uint64(num)) }
 		}
 		mk.Op = op
 
-		sc.Scan()
-		mk.ThrowMod, _ = strconv.Atoi(d11TestPat.FindStringSubmatch(sc.Text())[1])
+		var n int
 
 		sc.Scan()
-		mk.TrueThrow, _ = strconv.Atoi(d11ThrowPat.FindStringSubmatch(sc.Text())[2])
+		n, _ = strconv.Atoi(d11TestPat.FindStringSubmatch(sc.Text())[1])
+		mk.ThrowMod = uint64(n)
+		lcm *= mk.ThrowMod
 
 		sc.Scan()
-		mk.FalseThrow, _ = strconv.Atoi(d11ThrowPat.FindStringSubmatch(sc.Text())[2])
+		n, _ = strconv.Atoi(d11ThrowPat.FindStringSubmatch(sc.Text())[2])
+		mk.TrueThrow = uint64(n)
+
+		sc.Scan()
+		n, _ = strconv.Atoi(d11ThrowPat.FindStringSubmatch(sc.Text())[2])
+		mk.FalseThrow = uint64(n)
 
 		sc.Scan() // empty line
 		monkeys = append(monkeys, mk)
 	}
 
-	for round := 0; round < 20; round++ {
+	for round := uint64(0); round < p.Rounds; round++ {
 		for i := range monkeys {
 			for _, itemWorry := range monkeys[i].Items {
 				monkeys[i].InspectionCount++
-				newItemWorry := monkeys[i].Op(itemWorry) / 3
+				newItemWorry := monkeys[i].Op(itemWorry) / p.WorryDiv
+				newItemWorry = newItemWorry % lcm
 				catchIdx := monkeys[i].FalseThrow
 				if 0 == newItemWorry%monkeys[i].ThrowMod {
 					catchIdx = monkeys[i].TrueThrow
@@ -91,5 +103,5 @@ func (p Day11) Solve(input io.Reader) (answer string, err error) {
 			}
 		}
 	}
-	return strconv.Itoa(acc), nil
+	return strconv.FormatUint(acc, 10), nil
 }
