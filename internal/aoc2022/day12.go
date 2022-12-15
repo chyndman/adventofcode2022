@@ -86,8 +86,7 @@ func (h *d12PathfindHeap) Pop() any {
 	return x
 }
 
-func (hm d12Heightmap) Pathfind() (dists [][]uint) {
-	source := hm.Find('S')
+func (hm d12Heightmap) Pathfind(source image.Point) (dists [][]uint) {
 	dists = make([][]uint, len(hm))
 	for y := range dists {
 		dists[y] = make([]uint, len(hm[y]))
@@ -121,15 +120,39 @@ func (hm d12Heightmap) Pathfind() (dists [][]uint) {
 	return
 }
 
-type Day12 struct{}
+func swhm1(hm d12Heightmap) uint {
+	dists := hm.Pathfind(hm.Find('S'))
+	dest := hm.Find('E')
+	return dists[dest.Y][dest.X]
+}
+
+func swhm2(hm d12Heightmap) (distMin uint) {
+	distMin = math.MaxUint
+	dest := hm.Find('E')
+	for y := range hm {
+		for x := range hm[y] {
+			if 'a' == hm[y][x] || 'S' == hm[y][x] {
+				dists := hm.Pathfind(image.Point{x, y})
+				dist := dists[dest.Y][dest.X]
+				if dist < distMin {
+					distMin = dist
+				}
+			}
+		}
+	}
+	return
+}
+
+type Day12 struct {
+	SolveWithHeightmap func(hm d12Heightmap) uint
+}
 
 var (
-	Day12Part1 = Day12{}
+	Day12Part1 = Day12{swhm1}
+	Day12Part2 = Day12{swhm2}
 )
 
 func (p Day12) Solve(input io.Reader) (answer string, err error) {
 	hm := d12Heightmap(puzzle.ReadLines(input))
-	dists := hm.Pathfind()
-	dest := hm.Find('E')
-	return strconv.Itoa(int(dists[dest.Y][dest.X])), nil
+	return strconv.Itoa(int(p.SolveWithHeightmap(hm))), nil
 }
