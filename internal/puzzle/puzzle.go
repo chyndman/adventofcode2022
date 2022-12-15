@@ -21,3 +21,11 @@ func ForEachLineSubmatches(input io.Reader, pat string, fn func(submatches []str
 		fn(r.FindStringSubmatch(sc.Text()))
 	}
 }
+
+func ReadLines(input io.Reader) (lines []string) {
+	lines = make([]string, 0)
+	for sc := bufio.NewScanner(input); sc.Scan(); {
+		lines = append(lines, sc.Text())
+	}
+	return
+}
