@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	d14Width  int = 400
+	d14Width  int = 900
 	d14Height int = 300
 )
 
@@ -20,12 +20,8 @@ var (
 	d14Sand = color.Gray{0xdd}
 )
 
-type Day14Part1 struct{}
-
-func (_ Day14Part1) Solve(input io.Reader) (answer string, err error) {
-	acc := 0
-	ymax := 0
-	img := image.NewGray(
+func d14Parse(input io.Reader) (img *image.Gray, ymax int) {
+	img = image.NewGray(
 		image.Rectangle{
 			Min: image.Point{500 - (d14Width / 2), 0},
 			Max: image.Point{500 + (d14Width / 2), d14Height},
@@ -61,26 +57,58 @@ func (_ Day14Part1) Solve(input io.Reader) (answer string, err error) {
 			}
 		}
 	}
+	return
+}
 
-	for falling := false; !falling; {
-		falling = true
-		for x, y := 500, 0; falling && y <= ymax; y++ {
-			if d14Air == img.GrayAt(x, y+1) {
-				continue
-			}
-			if d14Air == img.GrayAt(x-1, y+1) {
-				x--
-				continue
-			}
-			if d14Air == img.GrayAt(x+1, y+1) {
-				x++
-				continue
-			}
+func d14DropSand(img *image.Gray, ymax int) (stopped bool) {
+	for x, y := 500, 0; !stopped && y <= ymax+1; y++ {
+		if d14Air == img.GrayAt(x, y+1) {
+			continue
+		}
+		if d14Air == img.GrayAt(x-1, y+1) {
+			x--
+			continue
+		}
+		if d14Air == img.GrayAt(x+1, y+1) {
+			x++
+			continue
+		}
 
-			falling = false
-			img.SetGray(x, y, d14Sand)
-			acc++
+		stopped = true
+		img.SetGray(x, y, d14Sand)
+	}
+
+	return
+}
+
+type Day14Part1 struct{}
+
+func (_ Day14Part1) Solve(input io.Reader) (answer string, err error) {
+	acc := 0
+	img, ymax := d14Parse(input)
+
+	for ; ; acc++ {
+		if stopped := d14DropSand(img, ymax); !stopped {
+			break
 		}
 	}
+
+	return strconv.Itoa(acc), nil
+}
+
+type Day14Part2 struct{}
+
+func (_ Day14Part2) Solve(input io.Reader) (answer string, err error) {
+	acc := 0
+	img, ymax := d14Parse(input)
+
+	for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
+		img.SetGray(x, ymax+2, d14Rock)
+	}
+
+	for ; d14Air == img.GrayAt(500, 0); acc++ {
+		d14DropSand(img, ymax)
+	}
+
 	return strconv.Itoa(acc), nil
 }
